@@ -24,4 +24,6 @@ public class Wallet {
 
     private Long balance;
 
+    @Version
+    private Long version;
 }
