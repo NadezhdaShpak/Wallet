@@ -1,5 +1,6 @@
 package com.shpak.wallet.dto;
 
+import com.shpak.wallet.model.OperationType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class WalletRequestTo {
         private UUID walletId;
 
         @NotNull
-        private String operationType;
+        private OperationType operationType;
 
         @NotNull
         @Positive
