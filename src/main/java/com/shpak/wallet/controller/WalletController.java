@@ -27,7 +27,6 @@ public class WalletController {
 
     @GetMapping("/wallets/{id}")
     public ResponseEntity<WalletResponseTo> getBalance(@PathVariable("id") UUID walletId) {
-        log.warn("Received request for wallet ID: {}", walletId);
         Long balance = walletService.getBalance(walletId);
         return ResponseEntity.ok(new WalletResponseTo(walletId, balance));
     }
