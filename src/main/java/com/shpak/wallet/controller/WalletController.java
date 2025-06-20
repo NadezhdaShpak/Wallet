@@ -31,8 +31,4 @@ public class WalletController {
         Long balance = walletService.getBalance(walletId);
         return ResponseEntity.ok(new WalletResponseTo(walletId, balance));
     }
-    @GetMapping("/test")
-    public String test() {
-        return "It works!";
-    }
 }
