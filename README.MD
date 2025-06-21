@@ -31,11 +31,13 @@
 ```bash
     docker compose up --build
 ```
-3. Для проверки раотоспособности, в БД добавлен тестовый кошелек
+3. Для проверки работоспособности, в БД добавлен тестовый кошелек
 проверить работу можно с помощью команд:
 ```bash
-GET http://localhost:8080/api/v1/wallets/2f3a52ff-3969-476f-a25f-d99bc3718f73
-POST http://localhost:8080/api/v1/wallet
+    GET http://localhost:8080/api/v1/wallets/2f3a52ff-3969-476f-a25f-d99bc3718f73
+```
+```bash
+    POST http://localhost:8080/api/v1/wallet
 Content-Type: application/json
 {
   "walletId": "2f3a52ff-3969-476f-a25f-d99bc3718f73",
@@ -44,7 +46,7 @@ Content-Type: application/json
 }
 ```
 
-Остановить приложение 
+Остановка приложения
 ```bash
-docker compose down
+    docker compose down
 ```
