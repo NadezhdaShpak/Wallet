@@ -22,27 +22,9 @@ public class WalletService {
 
     @Transactional
     public void changeBalance(WalletRequestTo request) {
-        OperationType operationType = request.getOperationType();
-
         for (int i = 0; i < MAX_RETRIES; i++) {
             try {
-            Wallet wallet = repository.findById(request.getWalletId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found"));
-
-            if (OperationType.DEPOSIT.equals(operationType)) {
-                wallet.setBalance(wallet.getBalance() + request.getAmount());
-            }
-
-            else if (OperationType.WITHDRAW.equals(operationType)) {
-                if (request.getAmount() > wallet.getBalance()) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough funds");
-                }
-                wallet.setBalance(wallet.getBalance() - request.getAmount());
-
-            } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown operation type");
-            }
-                repository.save(wallet);
+                updateBalance(request);
                 return;
             } catch (ObjectOptimisticLockingFailureException ex) {
                 if (i == MAX_RETRIES - 1) {throw new ResponseStatusException(
@@ -53,6 +35,23 @@ public class WalletService {
                     Thread.sleep(10 + (int)(Math.random() * 20));
                 } catch (InterruptedException ignored) {}
             }
+        }
+    }
+
+    private void updateBalance(WalletRequestTo request) {
+        Wallet wallet = repository.findById(request.getWalletId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found"));
+        OperationType operationType = request.getOperationType();
+
+        switch (operationType) {
+            case DEPOSIT -> wallet.setBalance(wallet.getBalance() + request.getAmount());
+            case WITHDRAW -> {
+                if (request.getAmount() > wallet.getBalance()) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough funds");
+                }
+                wallet.setBalance(wallet.getBalance() - request.getAmount());
+            }
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown operation type");
         }
     }
 
